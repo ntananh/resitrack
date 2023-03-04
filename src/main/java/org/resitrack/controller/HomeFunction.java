@@ -45,8 +45,8 @@ public class HomeFunction {
     private static boolean isNotValidStreetName(String street_names){
 
         if (street_names.isEmpty() || street_names.trim().length() < 1){
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 }
