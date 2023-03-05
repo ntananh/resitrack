@@ -2,7 +2,7 @@ package org.resitrack.entity;
 import java.util.Scanner;
 import org.resitrack.enums.Gender;
 import java.util.Date;
-public abstract class Person {
+public class Person {
     static Scanner sc = new Scanner(System.in);
     private String name;
     private Gender sex;
