@@ -5,6 +5,6 @@ import java.util.List;
 
 public class Town {
     private List<House> numberOfHouse = new ArrayList<>();
-    private int zip_code;
+    private int zipCode;
     private String name;
 }
