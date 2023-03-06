@@ -17,4 +17,35 @@ public class Person {
         this.name = name;
         this.sex = sex;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Gender getSex() {
+        return sex;
+    }
+
+    public void setSex(Gender sex) {
+        this.sex = sex;
+    }
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
+    @Override
+    public String toString() {
+        return "Member : " + name + "\n" + "Gender : " + sex + "\n"
+                + "Birthday : " + dob + "\n" + "Citizen ID " + idNumber + "\n"
+                + "Job : " + job;
+    }
 }
