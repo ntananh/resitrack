@@ -1,21 +1,29 @@
 package org.resitrack.entity;
-import java.util.Scanner;
 import org.resitrack.enums.Gender;
 import java.util.Date;
 public class Person {
-    static Scanner sc = new Scanner(System.in);
     private String name;
     private Gender sex;
     private Date dob;
     private long idNumber;
     private String job;
+    private House house;
+
+    public House getHouse() {
+        return house;
+    }
+
+    public void setHouse(House house) {
+        this.house = house;
+    }
 
     public Person() {
     }
 
-    public Person(String name, Gender sex) {
+    public Person(String name, Gender sex, House house) {
         this.name = name;
         this.sex = sex;
+        this.house = house;
     }
 
     public String getName() {
@@ -45,7 +53,7 @@ public class Person {
     @Override
     public String toString() {
         return "Member : " + name + "\n" + "Gender : " + sex + "\n"
-                + "Birthday : " + dob + "\n" + "Citizen ID " + idNumber + "\n"
-                + "Job : " + job;
+                + "Birthday : " + dob + "\n" + "Citizen ID: " + idNumber + "\n"
+                + "Job : " + job + "\n"+"House Number: " + house.getNumberHouse() + "\n";
     }
 }
