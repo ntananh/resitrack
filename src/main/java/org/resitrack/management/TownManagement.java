@@ -11,4 +11,9 @@ public class TownManagement {
         // add house to town logic
         return new ArrayList<Town>();
     }
+
+    public Town getTownById(String id) {
+        // code logic to find town by id
+        return new Town();
+    }
 }
