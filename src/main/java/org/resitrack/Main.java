@@ -66,6 +66,9 @@ public class Main {
                 case "2":
                     personController.searchPeopleByName();
                     break;
+                case "3":
+                    personController.deletePeopleByName();
+                    break;
                 default:
                     System.out.println("Wrong person manage choice!!!");
             }

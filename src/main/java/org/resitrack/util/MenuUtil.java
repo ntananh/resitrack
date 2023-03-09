@@ -19,6 +19,7 @@ public class MenuUtil {
         System.out.println("\n\n|----------------Person Menu--------------|");
         System.out.println("| 1. Add Person                           |");
         System.out.println("| 2. Search people by name                |");
+        System.out.println("| 3. Delete people by name                |");
         System.out.println("| 4. Exit                                 |");
         System.out.println("|-----------------------------------------|");
     }
