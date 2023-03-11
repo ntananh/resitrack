@@ -14,12 +14,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PersonController {
     private static final AtomicInteger count = new AtomicInteger(INITIAL_ID_VALUE);
-    private final List<Person> people;
+    private List<Person> people;
     private final Scanner scanner;
 
-    public PersonController(List<Person> people, Scanner scanner) {
+    public PersonController() {
+        this.scanner = new Scanner(System.in);
+    }
+
+    public void setPeople(List<Person> people) {
         this.people = people;
-        this.scanner = scanner;
     }
 
     public void addNewPerson() {

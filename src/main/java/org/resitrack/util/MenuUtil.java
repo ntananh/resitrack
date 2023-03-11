@@ -23,4 +23,12 @@ public class MenuUtil {
         System.out.println("|-----------------------------------------|");
     }
 
+    public static void houseMenu() {
+        System.out.println("\n\n|----------------House Menu---------------|");
+        System.out.println("| 1. Add House                            |");
+        System.out.println("| 2. View all houses                      |");
+        System.out.println("| 4. Exit                                 |");
+        System.out.println("|-----------------------------------------|");
+    }
+
 }
