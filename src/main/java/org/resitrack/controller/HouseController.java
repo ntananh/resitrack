@@ -66,6 +66,10 @@ public class HouseController {
         }
     }
 
+    /**
+     * retrieve the value of townId
+     * @returns the neighborhood ID
+     */
     private String getTownId() {
         int currentNumberOfTown = townController.getNumberOfTown();
         if (currentNumberOfTown <= 0) {
@@ -88,7 +92,10 @@ public class HouseController {
 
         return townId;
     }
-
+    /**
+     * retrieve the value of HouseNumber
+     * @returns the neighborhood number house
+     */
     private String getHouseNumber(String streetName, String townId) {
         System.out.print("Enter house number: ");
         String houseNumber = scanner.nextLine();
@@ -102,7 +109,10 @@ public class HouseController {
         }
         return houseNumber;
     }
-
+    /**
+     * retrieve the value of StreetName
+     * @returns the neighborhood street name
+     */
     private String getStreetName(String townId) {
         System.out.print("Enter street name:");
         String streetName = scanner.nextLine();
@@ -116,7 +126,10 @@ public class HouseController {
         }
         return streetName;
     }
-
+    /**
+     * retrieve the value of HouseInfo
+     * @returns house information like house ID, house number, street name, town name
+     */
     public String getHouseInfo(House house) {
         Town town = townController.getTownById(house.getTownId());
         return "House{" +
@@ -132,7 +145,9 @@ public class HouseController {
             System.out.println(getHouseInfo(house));
         }
     }
-
+    /**
+     * This function is used to check the error of the house number entered by the user and give a message
+     */
     private String validateHouseNumber(String houseNumber, String streetName, String townId) {
         if (CommonUtil.isNullOrBlank(houseNumber) || CommonUtil.isNullOrBlank(streetName)) {
             return "ERROR: House number cannot leave blank";
@@ -149,7 +164,9 @@ public class HouseController {
 
         return null;
     }
-
+    /**
+     * This function is used to check the error of the street name entered by the user and give a message
+     */
     private String validateStreetName(String streetName, String townId) {
         if (CommonUtil.isNullOrBlank(streetName)) {
             return "ERROR: Street name cannot leave blank";
@@ -162,13 +179,18 @@ public class HouseController {
 
         return null;
     }
-
+    /**
+     * This function is used to check if the town has the same house number
+     */
     private boolean isHouseInTownExist(String houseNumber, String townId) {
         return houses.stream()
                 .anyMatch(house -> townId.equalsIgnoreCase(house.getTownId()) &&
                         houseNumber.equalsIgnoreCase(house.getHouseNumber()));
     }
-
+    /**
+     * This function is used to transmit the necessary information of the house
+     * @return home with attributes like: house number, street name, townId
+     */
     private House createHouse(String houseNumber, String streetName, String townId) {
         return new House(houseNumber, streetName, townId);
     }

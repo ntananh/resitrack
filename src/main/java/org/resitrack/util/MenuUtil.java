@@ -23,6 +23,9 @@ public class MenuUtil {
         System.out.println("|-----------------------------------------|");
     }
 
+    /**
+     * This is a function so that users can choose the functions they want
+     */
     public static void houseMenu() {
         System.out.println("\n\n|----------------House Menu---------------|");
         System.out.println("| 1. Add House                            |");
