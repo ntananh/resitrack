@@ -5,13 +5,15 @@ import java.util.List;
 public class House {
     private String id;
     private String houseNumber;
+    private String streetName;
     private String householdId;
     private String townId;
     private List<Person> members;
 
-    public House(String houseNumber, String townId) {
+    public House(String houseNumber, String streetName, String townId) {
         this.id = "HID" + houseNumber;
         this.houseNumber = houseNumber;
+        this.streetName = streetName;
         this.townId = townId;
     }
 
@@ -25,6 +27,10 @@ public class House {
 
     public String getHouseNumber() {
         return houseNumber;
+    }
+
+    public String getStreetName() {
+        return streetName;
     }
 
     @Override
