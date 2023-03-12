@@ -172,9 +172,8 @@ public class HouseController {
             return "ERROR: Street name cannot leave blank";
         }
 
-        if (streetName.trim().length() < 1) {
-            return "ERROR: Street name cannot less than 2 characters, " +
-                    "if your house number just have 1 character please add \"0\" before it";
+        if (streetName.trim().length() < 2) {
+            return "ERROR: Street name cannot less than 2 characters, ";
         }
 
         return null;
