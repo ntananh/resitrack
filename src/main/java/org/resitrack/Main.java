@@ -49,7 +49,7 @@ public class Main {
                     System.out.println("Wrong choice, type again!");
             }
 
-        } while (!choice.equals(EXIT));
+        } while (!choice.equals(EXIT_MAIN_MENU));
     }
 
     public static void managePerson(PersonController personController, Scanner scanner) {
@@ -60,16 +60,22 @@ public class Main {
             choice = scanner.nextLine();
 
             switch (choice) {
-                case "1":
+                case ADD_PERSON:
                     personController.addNewPerson();
                     break;
-                case "2":
+                case SEARCH_PERSON:
                     personController.searchPeopleByName();
+                    break;
+                case DELETE_PERSON:
+                    personController.deletePeopleByName();
+                    break;
+                case EDIT_PERSON:
+                    personController.updatePerson();
                     break;
                 default:
                     System.out.println("Wrong person manage choice!!!");
             }
 
-        } while (!choice.equals(EXIT));
+        } while (!choice.equals(EXIT_PERSON_MENU));
     }
 }
