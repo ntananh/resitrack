@@ -4,12 +4,11 @@ import org.resitrack.entity.House;
 import org.resitrack.entity.Town;
 import org.resitrack.util.CommonUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * create a HouseController class with functions: add, delete, edit, search, display information about the house
+ * Create a HouseController class with functions: add, delete, edit, search, display information about the house
  *
  * @author TuDucThinh
  * @since 13/3/2023
@@ -20,7 +19,7 @@ public class HouseController {
      */
     private final Scanner scanner;
     /**
-     * this function has access scope in the class.
+     * This function has access scope in the class.
      * Data type is TownController variable name townController
      */
     private TownController townController;
@@ -79,7 +78,7 @@ public class HouseController {
     /**
      * This function is used to retrieve the value of ID town
      *
-     * @return the ID town
+     * @return The ID town
      */
     private String getTownId() {
 
@@ -109,7 +108,7 @@ public class HouseController {
      * This function is used to retrieve the value of house number
      *
      * @param townId pass ID town in String
-     * @return the neighborhood number house
+     * @return The neighborhood number house
      */
     private String getHouseNumber(String townId) {
 
@@ -130,7 +129,7 @@ public class HouseController {
      * This function is used to retrieve the value of House Information
      *
      * @param house infuse the value of house in a House style
-     * @return house information like house ID, house number, town name
+     * @return House information like house ID, house number, town name
      */
     public String getHouseInfo(House house) {
 
@@ -142,23 +141,11 @@ public class HouseController {
     }
 
     /**
-     * This function is used to print the information of the houses in the town to the screen
-     *
-     * @return list of houses in town
-     */
-    public void printAllHouseInformation() {
-
-        for (House house : houses) {
-            System.out.println(getHouseInfo(house));
-        }
-    }
-
-    /**
      * This function is used to check the error of the house number entered by the user and give a message
      *
      * @param houseNumber new house number
      * @param townId      town id to check if given house number exist or not
-     * @return errors when user enters house number
+     * @return Errors when user enters house number
      */
     private String validateHouseNumber(String houseNumber, String townId) {
 
@@ -183,7 +170,7 @@ public class HouseController {
      *
      * @param houseNumber pass the house number as String
      * @param townId      pass ID town in String
-     * @return true if the input value has the same house number, tow ID already. if false return false
+     * @return True if the input value has the same house number, tow ID already. if false return false
      */
     private boolean isHouseInTownExist(String houseNumber, String townId) {
 
