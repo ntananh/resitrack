@@ -20,9 +20,6 @@ public class PersonController {
     public PersonController(List<Person> people, Scanner scanner) {
         this.people = people;
         this.scanner = scanner;
-        addPerson(new Person("P1", "giang", Gender.GAY));
-        addPerson(new Person("P2", "giang", Gender.GAY));
-        addPerson(new Person("P3", "giang", Gender.GAY));
     }
 
     public void addNewPerson() {
@@ -70,7 +67,6 @@ public class PersonController {
             System.out.println("Delete false");
     }
 
-
     public void printPersonInformation(Person person) {
         System.out.println("Id: " + person.getId());
         System.out.println("Name: " + person.getName());
@@ -108,12 +104,12 @@ public class PersonController {
                 if (choose.equalsIgnoreCase("ALL")) {
                     people.removeAll(peopleWithName);
                 } else {
-                    List<Person> peopleWithId = null;
+                    Person person = null;
                     if (!CommonUtil.isNullOrBlank(choose)) {
-                        peopleWithId = findPersonById(choose);
+                        person = findPersonById(choose);
                     }
-                    if (peopleWithId != null) {
-                        people.remove(peopleWithId.get(0));
+                    if (person != null) {
+                        people.remove(person);
                         flag = true;
                     } else {
                         System.out.println("ID Invalid ");
@@ -125,18 +121,14 @@ public class PersonController {
         return flag;
     }
 
-    private List<Person> findPersonById(String id) {
-        List<Person> peopleWithName = new ArrayList<>();
-
+    private Person findPersonById(String id) {
         for (Person person : people) {
             if (id.equalsIgnoreCase(person.getId())) {
-                peopleWithName.add(person);
+                return person;
             }
         }
-
-        return peopleWithName;
+        return null;
     }
-
 
     private Person createPerson(String name, Gender gender) {
         if (CommonUtil.isNullOrBlank(name)) {
