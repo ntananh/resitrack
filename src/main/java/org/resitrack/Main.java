@@ -9,7 +9,6 @@ import org.resitrack.entity.Town;
 import org.resitrack.util.MenuUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -84,11 +83,8 @@ public class Main {
             choice = scanner.nextLine();
 
             switch (choice) {
-                case "1":
+                case ADD_HOUSE:
                     houseController.createNewHouse();
-                    break;
-                 case "2":
-                    houseController.printAllHouseInformation();
                     break;
                 default:
                     System.out.println("Wrong person manage choice!!!");

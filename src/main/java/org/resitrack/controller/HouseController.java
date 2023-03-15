@@ -1,30 +1,28 @@
 package org.resitrack.controller;
 
 import org.resitrack.entity.House;
-import org.resitrack.entity.Town;
 import org.resitrack.util.CommonUtil;
 
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * Create a HouseController class with functions: add, delete, edit, search, display information about the house
+ * Create a House Controller.
  *
  * @author TuDucThinh
  * @since 13/3/2023
  */
 public class HouseController {
     /**
-     * This function makes the Scanner unchangeable
+     * Used to access Scanner.
      */
     private final Scanner scanner;
     /**
-     * This function has access scope in the class.
-     * Data type is TownController variable name townController
+     * Used to access townController.
      */
     private TownController townController;
     /**
-     * This function is used to create a list of houses.
+     * Used to create a list of houses.
      * Helps users to store houses that have just been saved to town
      */
     private List<House> houses;
@@ -49,8 +47,8 @@ public class HouseController {
     public void createNewHouse() {
 
         String townId = getTownId();
-        String nameTown = townController.getTownById(townId).getName();
-        int count = 1;
+        String townName = townController.getTownById(townId).getName();
+        int numberOfHouse = 1;
         int choice;
         if (townId == null) {
             System.out.println("Town is empty, could not create a new house. Please create a new town first");
@@ -58,27 +56,25 @@ public class HouseController {
         }
 
         do {
-            System.out.println("House " + count + ": ");
             String houseNumber = getHouseNumber(townId);
 
             this.houses.add(createHouse(houseNumber, townId));
-            System.out.println("\nAdded " + count + " house. The latest home address is: " + houseNumber + " " + nameTown);
+            System.out.println("\nAdded " + numberOfHouse + " house. The latest home address is: " + houseNumber + " " + townName);
             System.out.println();
             System.out.print("Enter 0 to exit, Enter 1 to continue: ");
             choice = scanner.nextInt();
             scanner.nextLine();
             if (choice == 1) {
-                count++;
+                numberOfHouse++;
             }
         } while (choice != 0);
-
 
     }
 
     /**
      * This function is used to retrieve the value of ID town
      *
-     * @return The ID town
+     * @return The existing ID town
      */
     private String getTownId() {
 
@@ -126,21 +122,6 @@ public class HouseController {
     }
 
     /**
-     * This function is used to retrieve the value of House Information
-     *
-     * @param house infuse the value of house in a House style
-     * @return House information like house ID, house number, town name
-     */
-    public String getHouseInfo(House house) {
-
-        Town town = townController.getTownById(house.getTownId());
-        return "House{" +
-                " id = '" + house.getId() + '\'' +
-                ", house number = '" + house.getHouseNumber() + "', '" + town.getName() + '\'' +
-                '}';
-    }
-
-    /**
      * This function is used to check the error of the house number entered by the user and give a message
      *
      * @param houseNumber new house number
@@ -170,7 +151,7 @@ public class HouseController {
      *
      * @param houseNumber pass the house number as String
      * @param townId      pass ID town in String
-     * @return True if the input value has the same house number, tow ID already. if false return false
+     * @return True if house with house number, tow ID already existed, otherwise false
      */
     private boolean isHouseInTownExist(String houseNumber, String townId) {
 
@@ -188,8 +169,7 @@ public class HouseController {
      *
      * @param houseNumber pass the house number as String
      * @param townId      pass ID town in String
-     * @return Home with attributes like: house number, townId
-     * @see House
+     * @return {@link House} New house created
      */
     private House createHouse(String houseNumber, String townId) {
 

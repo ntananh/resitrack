@@ -5,6 +5,7 @@ public class MenuUtil {
     public final static String MANAGE_HOUSE = "2";
     public final static String MANAGE_TOWN = "3";
     public final static String EXIT = "4";
+    public final static String ADD_HOUSE = "1";
 
     public static void mainMenu() {
         System.out.println("|-----------Resident Management-----------|");
@@ -29,7 +30,6 @@ public class MenuUtil {
     public static void houseMenu() {
         System.out.println("\n\n|----------------House Menu---------------|");
         System.out.println("| 1. Add House                            |");
-        System.out.println("| 2. View all houses                      |");
         System.out.println("| 4. Exit                                 |");
         System.out.println("|-----------------------------------------|");
     }
