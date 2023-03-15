@@ -20,9 +20,9 @@ public class Main {
         List<House> houses = new ArrayList<>();
         List<Town> towns = new ArrayList<>();
 
-        PersonController personController;
-        HouseController houseController;
-        TownController townController;
+        PersonController personController = new PersonController();
+        HouseController houseController = new HouseController();
+        TownController townController = new TownController();
 
         Scanner scanner = new Scanner(System.in);
         String choice;
@@ -34,11 +34,10 @@ public class Main {
 
             switch (choice) {
                 case MANAGE_PERSON:
-                    personController = new PersonController(people, scanner);
+                    personController.setPeople(people);
                     managePerson(personController, scanner);
                     break;
                 case MANAGE_HOUSE:
-                    houseController = new HouseController();
                     System.out.println("Manage house");
                     break;
                 case MANAGE_TOWN:
@@ -49,7 +48,7 @@ public class Main {
                     System.out.println("Wrong choice, type again!");
             }
 
-        } while (!choice.equals(EXIT));
+        } while (!choice.equals(EXIT_MAIN_MENU));
     }
 
     public static void managePerson(PersonController personController, Scanner scanner) {
@@ -61,18 +60,50 @@ public class Main {
 
             switch (choice) {
                 case ADD_PERSON:
-                    personController.addNewPerson();
+                    System.out.println("Adding new person");
+                    boolean personBeAdded = personController.addNewPerson();
+                    if (personBeAdded)
+                        System.out.println("Add success !");
+                    else
+                        System.out.println("Add false !");
+                    break;
+                case SHOW_ALL_PERSON:
+                    System.out.println("Show all person ");
+                    personController.showAll();
                     break;
                 case SEARCH_PERSON:
                     personController.searchPeopleByName();
                     break;
                 case DELETE_PERSON:
-                    personController.deletePeopleByName();
+                    System.out.println("Delete function: ");
+                    System.out.println("1. Delete person by ID");
+                    System.out.println("2. Delete people by name");
+                    System.out.println("> Enter your choose: ");
+                    String choose = scanner.nextLine();
+                    if (choose.equals("1")) {
+                        System.out.print("Enter IdPerson want to delete: ");
+                        String id = scanner.nextLine();
+                        if(personController.deletePersonById(id)){
+                            System.out.println("Delete success !");
+                        }else {
+                            System.out.println("Delete false !");
+                        }
+                    } else if (choose.equals("2")) {
+                        System.out.print("Enter Name Person want to delete: ");
+                        String name = scanner.nextLine();
+                        if(personController.deletePeopleByName(name)){
+                            System.out.println("Delete success !");
+                        }else {
+                            System.out.println("Delete false !");
+                        }
+                    }else {
+                        System.out.println("Not found ");
+                    }
                     break;
                 default:
                     System.out.println("Wrong person manage choice!!!");
             }
 
-        } while (!choice.equals(EXIT));
+        } while (!choice.equals(EXIT_PERSON_MENU));
     }
 }

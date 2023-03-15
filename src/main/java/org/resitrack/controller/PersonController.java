@@ -14,28 +14,68 @@ import static org.resitrack.util.CommonUtil.INITIAL_ID_VALUE;
 
 public class PersonController {
     private static final AtomicInteger count = new AtomicInteger(INITIAL_ID_VALUE);
-    private final List<Person> people;
-    private final Scanner scanner;
+    private List<Person> people;
+    Scanner scanner = new Scanner(System.in);
 
-    public PersonController(List<Person> people, Scanner scanner) {
-        this.people = people;
-        this.scanner = scanner;
+    public PersonController() {
+
     }
 
-    public void addNewPerson() {
-        System.out.println("Adding new person");
+    public void setPeople(List<Person> people) {
+        this.people = people;
+    }
+
+    /**
+     * This function is used to add new one person
+     * @return true if add process success and vice versa
+     */
+
+    public boolean addNewPerson() {
         System.out.print("Enter person name: ");
         String name = scanner.nextLine();
 
         Gender gender = getGender();
         Person person = createPerson(name, gender);
 
-        if (!addPerson(person)) {
-            System.out.println("Failed to add a new person");
-        } else {
-            System.out.println("Added person: " + person);
-        }
+        return addPerson(person);
     }
+
+    /**
+     * This function is used to show all person be added
+     */
+    public void showAll() {
+        System.out.format("| %-4s | %-20s | %-10s | %-6s | %-12s |\n", "ID", "Name", "ID Number", "Sex", "Date of Birth");
+        System.out.println("---------------------------------------------------------------------");
+        for (Person person : people) {
+            System.out.format("| %-4s | %-20s | %-10s | %-6s | %-12s  |\n",
+                    person.getId(),
+                    person.getName(),
+                    person.getIdNumber(),
+                    person.getGender(),
+                    person.getDob().toString()
+            );
+        }
+        System.out.println("---------------------------------------------------------------------");
+    }
+
+    /**
+     * This function is used to delete one person
+     *
+     * @param id
+     * @return true if delete process success and vice versa
+     */
+
+    public boolean deletePersonById(String id) {
+        Person personById = findPersonById(id);
+        if (personById == null) {
+            return false;
+        }
+        return deletePerson(personById);
+    }
+
+    /**
+     * This function is used to search one or many people
+     */
 
     public void searchPeopleByName() {
         String name;
@@ -54,25 +94,75 @@ public class PersonController {
         }
     }
 
-    public void deletePeopleByName() {
-        String name;
-        do {
-            System.out.print("> Enter name to delete: ");
-            name = scanner.nextLine();
-        } while (CommonUtil.isNullOrBlank(name));
-        boolean isDeleted = deletePerson(name);
-        if (isDeleted)
-            System.out.println("Delete success");
-        else
-            System.out.println("Delete false");
+    /**
+     * This function is used to delete one or many people
+     *
+     * @param name
+     * @return true if delete process success and vice versa
+     */
+    public boolean deletePeopleByName(String name) {
+        List<Person> peopleByName = findPersonByName(name);
+        if (peopleByName.size() < 0) {
+            return false;
+        }
+        return deletePeople(peopleByName);
     }
 
+    /**
+     * This function is used to show basic information of one person
+     *
+     * @param person
+     */
     public void printPersonInformation(Person person) {
         System.out.println("Id: " + person.getId());
         System.out.println("Name: " + person.getName());
         System.out.println("Gender: " + person.getGender());
         System.out.println("Dob: " + person.getDob());
     }
+
+    /**
+     * This function is used to delete many people
+     *
+     * @param people
+     * @return true if delete people success and vice versa
+     */
+
+    private boolean deletePeople(List<Person> people) {
+        List<Person> deletePeople = new ArrayList<>();
+        for (Person person : people) {
+            if (!deletePerson(person)) {
+                restorePeople(deletePeople);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This function is used to restore list people if delete process false
+     *
+     * @param deletePeople
+     */
+    private void restorePeople(List<Person> deletePeople) {
+        people.addAll(deletePeople);
+    }
+
+    /**
+     * This function is used to delete one person
+     *
+     * @param person
+     * @return true if delete person success and vice versa
+     */
+    private boolean deletePerson(Person person) {
+        return people.remove(person);
+    }
+
+    /**
+     * This function is used to find one person or many people by their name
+     *
+     * @param name
+     * @return {@link List<Person>} List<Person> found
+     */
 
     private List<Person> findPersonByName(String name) {
         List<Person> peopleWithName = new ArrayList<>();
@@ -86,40 +176,12 @@ public class PersonController {
         return peopleWithName;
     }
 
-    private boolean deletePerson(String name) {
-        boolean flag = false;
-        List<Person> peopleWithName = null;
-        if (!CommonUtil.isNullOrBlank(name)) {
-            peopleWithName = findPersonByName(name);
-        }
-        if (peopleWithName != null) {
-            if (peopleWithName.size() == 1) {
-                people.remove(peopleWithName.get(0));
-                flag = true;
-            } else if (peopleWithName.size() > 0) {
-                peopleWithName.forEach(this::printPersonInformation);
-                System.out.print("Have " + peopleWithName.size() + " member " + name + " was found !!!" + "\n" +
-                        "Please choose ID family member want delete or enter [ ALL ] to delete all:  ");
-                String choose = scanner.nextLine();
-                if (choose.equalsIgnoreCase("ALL")) {
-                    people.removeAll(peopleWithName);
-                } else {
-                    Person person = null;
-                    if (!CommonUtil.isNullOrBlank(choose)) {
-                        person = findPersonById(choose);
-                    }
-                    if (person != null) {
-                        people.remove(person);
-                        flag = true;
-                    } else {
-                        System.out.println("ID Invalid ");
-                    }
-
-                }
-            }
-        }
-        return flag;
-    }
+    /**
+     * This function is used to find one person by their id
+     *
+     * @param id
+     * @return {@link Person} Person found
+     */
 
     private Person findPersonById(String id) {
         for (Person person : people) {
@@ -130,12 +192,26 @@ public class PersonController {
         return null;
     }
 
+    /**
+     * This function is used to create one person
+     *
+     * @param gender
+     * @param name
+     * @return {@link Person} Person created
+     */
+
     private Person createPerson(String name, Gender gender) {
         if (CommonUtil.isNullOrBlank(name)) {
             return null;
         }
         return new Person(generatePersonId(), name, gender);
     }
+
+    /**
+     * This function is used to enter gender for person in add process
+     *
+     * @return {@link Gender} Gender created
+     */
 
     private Gender getGender() {
         String genderChoice;
@@ -164,6 +240,13 @@ public class PersonController {
     private String generatePersonId() {
         return "P" + count.getAndIncrement();
     }
+
+    /**
+     * This function is used to add new person
+     *
+     * @param person
+     * @return true if add person success and vice versa
+     */
 
     private boolean addPerson(Person person) {
         if (person != null) {

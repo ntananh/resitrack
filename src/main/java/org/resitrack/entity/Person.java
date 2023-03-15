@@ -30,6 +30,12 @@ public class Person {
         return name;
     }
 
+    public String getIdNumber() {
+        if (idNumber == null)
+            return "Not have";
+        else
+            return String.valueOf(idNumber);
+    }
 
     public Gender getGender() {
         return gender;
