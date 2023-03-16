@@ -60,22 +60,18 @@ public class Main {
             choice = scanner.nextLine();
 
             switch (choice) {
-                case ADD_PERSON:
-                    personController.addNewPerson();
-                    break;
-                case SEARCH_PERSON:
-                    personController.searchPeopleByName();
-                    break;
-                case DELETE_PERSON:
-                    personController.deletePeopleByName();
-                    break;
                 case EDIT_PERSON:
-                    personController.updatePerson();
+                    System.out.println("Update function ");
+                    System.out.print("Enter person id need to update: ");
+                    String id = scanner.nextLine();
+                    if (personController.updatePerson(id)) {
+                        System.out.println("Update success !");
+                    } else
+                        System.out.println("Update false !");
                     break;
                 default:
                     System.out.println("Wrong person manage choice!!!");
             }
-
         } while (!choice.equals(EXIT_PERSON_MENU));
     }
 }
