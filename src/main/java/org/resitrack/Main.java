@@ -17,11 +17,9 @@ import static org.resitrack.util.MenuUtil.*;
 public class Main {
     public static void main(String[] args) {
         List<Person> people = new ArrayList<>();
-        List<House> houses = new ArrayList<>();
         List<Town> towns = new ArrayList<>();
 
         PersonController personController = new PersonController();
-        HouseController houseController = new HouseController();
         TownController townController = new TownController();
 
         Scanner scanner = new Scanner(System.in);
@@ -38,10 +36,7 @@ public class Main {
                     managePerson(personController, scanner);
                     break;
                 case MANAGE_HOUSE:
-                    houseController.setHouses(houses);
-                    townController.setTowns(towns);
-                    houseController.setTownController(townController);
-                    manageHouse(houseController, scanner);
+                    manageHouse(scanner);
                     break;
                 case MANAGE_TOWN:
                     townController.setTowns(towns);
@@ -75,8 +70,17 @@ public class Main {
         } while (!choice.equals(EXIT));
     }
 
-    public static void manageHouse(HouseController houseController, Scanner scanner) {
+    public static void manageHouse(Scanner scanner) {
         String choice;
+        List<House> houses = new ArrayList<>();
+        List<Town> towns = new ArrayList<>();
+
+        HouseController houseController = new HouseController();
+        TownController townController = new TownController();
+
+        houseController.setHouses(houses);
+        townController.setTowns(towns);
+        houseController.setTownController(townController);
         do {
             houseMenu();
             System.out.print("> Enter your manage house choice: ");

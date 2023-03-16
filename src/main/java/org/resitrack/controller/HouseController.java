@@ -1,13 +1,14 @@
 package org.resitrack.controller;
 
 import org.resitrack.entity.House;
+import org.resitrack.entity.Town;
 import org.resitrack.util.CommonUtil;
 
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * Create a House Controller.
+ * House Controller used for managing houses, allow user to manipulate with house data.
  *
  * @author TuDucThinh
  * @since 13/3/2023
@@ -46,28 +47,28 @@ public class HouseController {
      */
     public void createNewHouse() {
 
-        String townId = getTownId();
-        String townName = townController.getTownById(townId).getName();
+        Town town = townController.getTownById(getTownId());
+        String townId = town.getId();
+        String townName = town.getName();
+
         int numberOfHouse = 1;
-        int choice;
+        String choice;
         if (townId == null) {
             System.out.println("Town is empty, could not create a new house. Please create a new town first");
             return;
         }
 
         do {
+            System.out.println("Adding a new house");
             String houseNumber = getHouseNumber(townId);
-
             this.houses.add(createHouse(houseNumber, townId));
+
             System.out.println("\nAdded " + numberOfHouse + " house. The latest home address is: " + houseNumber + " " + townName);
-            System.out.println();
-            System.out.print("Enter 0 to exit, Enter 1 to continue: ");
-            choice = scanner.nextInt();
-            scanner.nextLine();
-            if (choice == 1) {
-                numberOfHouse++;
-            }
-        } while (choice != 0);
+            System.out.print(">Enter 0 to exit, or press any key to continue!");
+            choice = scanner.nextLine();
+            numberOfHouse++;
+
+        } while (!choice.equalsIgnoreCase("0"));
 
     }
 
@@ -100,6 +101,11 @@ public class HouseController {
         return townId;
     }
 
+    private String idName(Town town) {
+
+        return town.getName();
+    }
+
     /**
      * This function is used to retrieve the value of house number
      *
@@ -122,11 +128,11 @@ public class HouseController {
     }
 
     /**
-     * This function is used to check the error of the house number entered by the user and give a message
+     * Validation function is used to check the error of the house number entered by the user and give a message
      *
      * @param houseNumber new house number
      * @param townId      town id to check if given house number exist or not
-     * @return Errors when user enters house number
+     * @return Error message when user enters an invalid house number
      */
     private String validateHouseNumber(String houseNumber, String townId) {
 
@@ -169,7 +175,7 @@ public class HouseController {
      *
      * @param houseNumber pass the house number as String
      * @param townId      pass ID town in String
-     * @return {@link House} New house created
+     * @return {@link House} New created house
      */
     private House createHouse(String houseNumber, String townId) {
 
