@@ -59,46 +59,40 @@ public class Main {
             choice = scanner.nextLine();
 
             switch (choice) {
-                case ADD_PERSON:
-                    System.out.println("Adding new person");
-                    boolean personBeAdded = personController.addNewPerson();
-                    if (personBeAdded)
-                        System.out.println("Add success !");
-                    else
-                        System.out.println("Add false !");
-                    break;
                 case SHOW_ALL_PERSON:
                     System.out.println("Show all person ");
                     personController.showAll();
                     break;
-                case SEARCH_PERSON:
-                    personController.searchPeopleByName();
-                    break;
                 case DELETE_PERSON:
-                    System.out.println("Delete function: ");
-                    System.out.println("1. Delete person by ID");
-                    System.out.println("2. Delete people by name");
-                    System.out.println("> Enter your choose: ");
-                    String choose = scanner.nextLine();
-                    if (choose.equals("1")) {
-                        System.out.print("Enter IdPerson want to delete: ");
-                        String id = scanner.nextLine();
-                        if(personController.deletePersonById(id)){
-                            System.out.println("Delete success !");
-                        }else {
-                            System.out.println("Delete false !");
+                    String choose;
+                    do {
+                        System.out.println("Delete function: ");
+                        System.out.println("1. Delete person by ID");
+                        System.out.println("2. Delete people by name");
+                        System.out.println("3. Exit function ");
+                        System.out.print("> Enter your choice: ");
+                        choose = scanner.nextLine();
+                        switch (choose) {
+                            case DELETE_PERSON_BY_ID:
+                                System.out.print("Enter person id want to delete: ");
+                                String id = scanner.nextLine();
+                                boolean deletedPerson = personController.deletePersonById(id);
+                                String logPerson = deletedPerson ? "Delete success !" : "Delete False";
+                                System.out.println(logPerson);
+                                break;
+                            case DELETE_PERSON_BY_NAME:
+                                System.out.print("Enter Name Person want to delete: ");
+                                String name = scanner.nextLine();
+                                boolean deletedPeople = personController.deletePeopleByName(name);
+                                String logPeople = deletedPeople ? "Delete success !" : "Delete False";
+                                System.out.println(logPeople);
+                                break;
+                            case EXIT_DELETE_PERSON_MENU:
+                                break;
+                            default:
+                                System.out.println("Wrong choose !!!");
                         }
-                    } else if (choose.equals("2")) {
-                        System.out.print("Enter Name Person want to delete: ");
-                        String name = scanner.nextLine();
-                        if(personController.deletePeopleByName(name)){
-                            System.out.println("Delete success !");
-                        }else {
-                            System.out.println("Delete false !");
-                        }
-                    }else {
-                        System.out.println("Not found ");
-                    }
+                    } while (!choose.equals(EXIT_DELETE_PERSON_MENU));
                     break;
                 default:
                     System.out.println("Wrong person manage choice!!!");
