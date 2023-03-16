@@ -15,6 +15,10 @@ import java.util.Scanner;
  */
 public class HouseController {
     /**
+     * Users can choose to continue adding houses by ADDING_HOUSE
+     */
+    public final static String ADDING_HOUSE = "0";
+    /**
      * Used to access Scanner.
      */
     private final Scanner scanner;
@@ -47,9 +51,7 @@ public class HouseController {
      */
     public void createNewHouse() {
 
-        Town town = townController.getTownById(getTownId());
-        String townId = town.getId();
-        String townName = town.getName();
+        String townId = getTownId();
 
         int numberOfHouse = 1;
         String choice;
@@ -58,17 +60,20 @@ public class HouseController {
             return;
         }
 
+        Town town = townController.getTownById(townId);
+        String townName = town.getName();
+
         do {
             System.out.println("Adding a new house");
             String houseNumber = getHouseNumber(townId);
             this.houses.add(createHouse(houseNumber, townId));
 
             System.out.println("\nAdded " + numberOfHouse + " house. The latest home address is: " + houseNumber + " " + townName);
-            System.out.print(">Enter 0 to exit, or press any key to continue!");
+            System.out.println(">Enter 0 to exit, or press any key to continue!");
             choice = scanner.nextLine();
             numberOfHouse++;
 
-        } while (!choice.equalsIgnoreCase("0"));
+        } while (!choice.equalsIgnoreCase(ADDING_HOUSE));
 
     }
 
@@ -99,11 +104,6 @@ public class HouseController {
         }
 
         return townId;
-    }
-
-    private String idName(Town town) {
-
-        return town.getName();
     }
 
     /**

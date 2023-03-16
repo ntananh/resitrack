@@ -15,12 +15,27 @@ import java.util.Scanner;
 import static org.resitrack.util.MenuUtil.*;
 
 public class Main {
-    public static void main(String[] args) {
-        List<Person> people = new ArrayList<>();
-        List<Town> towns = new ArrayList<>();
+    /**
+     * So that the manageHouse function can access Town through towns
+     */
+    private final static List<Town> towns = new ArrayList<>();
+    /**
+     * So that the manageHouse function can access House through houses
+     */
+    private final static List<House> houses = new ArrayList<>();
+    /**
+     * So that the manageHouse function can access TownController through townController
+     */
+    private final static TownController townController = new TownController();
+    /**
+     * So that the manageHouse function can access HouseController through houseController
+     */
+    private final static HouseController houseController = new HouseController();
 
+    public static void main(String[] args) {
+
+        List<Person> people = new ArrayList<>();
         PersonController personController = new PersonController();
-        TownController townController = new TownController();
 
         Scanner scanner = new Scanner(System.in);
         String choice;
@@ -72,15 +87,11 @@ public class Main {
 
     public static void manageHouse(Scanner scanner) {
         String choice;
-        List<House> houses = new ArrayList<>();
-        List<Town> towns = new ArrayList<>();
-
-        HouseController houseController = new HouseController();
-        TownController townController = new TownController();
 
         houseController.setHouses(houses);
         townController.setTowns(towns);
         houseController.setTownController(townController);
+
         do {
             houseMenu();
             System.out.print("> Enter your manage house choice: ");
