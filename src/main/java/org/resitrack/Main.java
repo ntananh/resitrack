@@ -9,24 +9,29 @@ import org.resitrack.entity.Town;
 import org.resitrack.util.MenuUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 import static org.resitrack.util.MenuUtil.*;
 
 public class Main {
+
     /**
      * So that the manageHouse function can access Town through towns
      */
     private final static List<Town> towns = new ArrayList<>();
+
     /**
      * So that the manageHouse function can access House through houses
      */
     private final static List<House> houses = new ArrayList<>();
+
     /**
      * So that the manageHouse function can access TownController through townController
      */
     private final static TownController townController = new TownController();
+
     /**
      * So that the manageHouse function can access HouseController through houseController
      */
@@ -101,8 +106,14 @@ public class Main {
                 case ADD_HOUSE:
                     houseController.createNewHouse();
                     break;
+                case DELETE_HOUSE:
+                    houseController.deleteHouse();
+                    break;
+                case SHOW_HOUSE:
+                    houseController.houseInformation();
+                    break;
                 default:
-                    System.out.println("Wrong person manage choice!!!");
+                    System.out.println("Wrong house manage choice!!!");
             }
 
         } while (!choice.equals(EXIT));

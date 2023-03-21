@@ -10,7 +10,7 @@ public class House {
     private List<Person> members;
 
     public House(String houseNumber, String townId) {
-        this.id = "HID" + houseNumber;
+        this.id = townId + houseNumber;
         this.houseNumber = houseNumber;
         this.townId = townId;
     }
@@ -30,9 +30,9 @@ public class House {
     @Override
     public String toString() {
         return "House{" +
-                "id='" + id + '\'' +
-                ", houseNumber='" + houseNumber + '\'' +
-                ", townId='" + townId + '\'' +
+                " id = '" + id + '\'' +
+                ", houseNumber = '" + houseNumber + '\'' +
+                ", townId = '" + townId.toUpperCase() + '\'' +
                 '}';
     }
 }

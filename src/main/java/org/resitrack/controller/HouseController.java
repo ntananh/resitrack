@@ -4,6 +4,7 @@ import org.resitrack.entity.House;
 import org.resitrack.entity.Town;
 import org.resitrack.util.CommonUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,18 +15,32 @@ import java.util.Scanner;
  * @since 13/3/2023
  */
 public class HouseController {
+
     /**
      * Users can choose to continue adding houses by ADDING_HOUSE
      */
     public final static String ADDING_HOUSE = "0";
+
+    /**
+     * User can delete 1 house by using DELETE_ONE_HOUSE
+     */
+    public final static String DELETE_ONE_HOUSE = "o";
+
+    /**
+     * User can delete multiple house by using DELETE_MULTIPLE_HOUSE
+     */
+    public final static String DELETE_MULTIPLE_HOUSE = "m";
+
     /**
      * Used to access Scanner.
      */
     private final Scanner scanner;
+
     /**
      * Used to access townController.
      */
     private TownController townController;
+
     /**
      * Used to create a list of houses.
      * Helps users to store houses that have just been saved to town
@@ -146,7 +161,7 @@ public class HouseController {
         }
 
         if (isHouseInTownExist(houseNumber, townId)) {
-            return "ERROR: House number " + houseNumber + " that exist in town '" + townId + "'. Please enter another house number ";
+            return "ERROR: House number " + houseNumber + " that exist in town '" + townId.toUpperCase() + "'. Please enter another house number ";
         }
 
         return null;
@@ -181,4 +196,165 @@ public class HouseController {
 
         return new House(houseNumber, townId);
     }
+
+    /**
+     * This function is used to remove houses from town.
+     * When you enter the program, you will be checked to see if there are any houses or not. If not, an announcement will be made.
+     * If yes, then the user will choose 1 of 2 options.
+     * Option 1 will delete all houses whose house number is the same as the house number entered.
+     * Option 2 you will have to enter the town id to delete the house
+     */
+    public void deleteHouse() {
+
+        String houseNumber = getCheckHouse();
+        String townId;
+        String optionTwo;
+
+        if (houseNumber == null) {
+            System.out.println("There are no houses on the list. You cannot perform this operation");
+            return;
+        }
+
+        findHouseByHouseNumber(houseNumber);
+        System.out.println("Enter [o] to delete one house , Enter [m] to delete all houses whose house numbers are: " + houseNumber);
+        System.out.print("Your choice: ");
+
+        do {
+            optionTwo = scanner.nextLine();
+
+            if (optionTwo.equalsIgnoreCase(DELETE_ONE_HOUSE)) {
+                System.out.print("Please enter your town id to delete: ");
+                townId = scanner.nextLine();
+                do {
+                    System.out.println("Town id: " + townId.toUpperCase() + " not found, please enter the correct town id in the list below: ");
+
+                    System.out.print("Please enter town id again here: ");
+                    townId = scanner.nextLine();
+
+                } while (townController.isTownExisted(townId));
+
+                deleteHouseByTownId(houseNumber, townId);
+
+            }
+            if (optionTwo.equalsIgnoreCase(DELETE_MULTIPLE_HOUSE)) {
+                deleteHouseByHouseNumber(houseNumber);
+                System.out.println("Successfully deleted");
+            }
+
+        } while (optionTwo.equalsIgnoreCase(DELETE_ONE_HOUSE) && optionTwo.equalsIgnoreCase(DELETE_MULTIPLE_HOUSE));
+
+    }
+
+    /**
+     * This function is used to check if a house exists or not. if not return null.
+     * If a house exists, a list of houses will be displayed. and let the user enter the house number they want to delete.
+     * If you enter it incorrectly, re-enter it.
+     *
+     * @return The House number
+     */
+    private String getCheckHouse() {
+        int currentNumberOfHouse = getNumberOfHouse();
+        if (currentNumberOfHouse <= 0) {
+            return null;
+        }
+        System.out.println("Existing home listings: ");
+        houseInformation();
+
+        System.out.print("Enter the house number you want to delete: ");
+        String houseNumber = scanner.nextLine();
+
+        while (!isHouseExisted(houseNumber)) {
+            System.out.println("House number: " + houseNumber + " not found, please enter the correct house number in the list below: ");
+            houseInformation();
+
+            System.out.print("Please enter house number again here: ");
+            houseNumber = scanner.nextLine();
+
+        }
+
+        return houseNumber;
+    }
+
+    /**
+     * This function is used to check if the house number you just entered already exists
+     *
+     * @param houseNumber pass ID house in String
+     * @return true when a house exists, otherwise false
+     */
+    private boolean isHouseExisted(String houseNumber) {
+        return houses.stream().anyMatch(house -> houseNumber.equalsIgnoreCase(house.getHouseNumber()));
+    }
+
+    /**
+     * This function is used to return the number of houses
+     *
+     * @return The number of existing houses
+     */
+    private int getNumberOfHouse() {
+        return houses.size();
+    }
+
+    /**
+     * This function is used to display the list of houses
+     */
+    public void houseInformation() {
+
+        houses.forEach(System.out::println);
+    }
+
+    /**
+     * This function is used to find houses by house number.
+     * Once found, it will display the houses with the same house number as the house number entered
+     *
+     * @param houseNumber Enter the house number to see if there are any houses with the same house number
+     */
+    private void findHouseByHouseNumber(String houseNumber) {
+
+        List<House> housesWithHouseNumbers = new ArrayList<>();
+
+        for (House house : houses) {
+            if (houseNumber.equalsIgnoreCase(house.getHouseNumber())) {
+
+                housesWithHouseNumbers.add(house);
+
+            }
+        }
+
+        System.out.println();
+        System.out.println("List of houses with house numbers are: " + houseNumber);
+        housesWithHouseNumbers.forEach(System.out::println);
+
+    }
+
+    /**
+     * This function is used to delete all houses with the same house number as entered
+     *
+     * @param houseNumber Pass in the house number to delete the houses whose house number is the same as the house number entered
+     */
+    private void deleteHouseByHouseNumber(String houseNumber) {
+
+        houses.removeIf(house -> house.getHouseNumber().equalsIgnoreCase(houseNumber));
+
+    }
+
+    /**
+     * This function is used to delete all houses with the same house number and town id as entered
+     *
+     * @param houseNumber Pass in the house number to delete the houses
+     * @param townId      Enter town id to delete house
+     */
+    private void deleteHouseByTownId(String houseNumber, String townId) {
+
+//        List<House> houses = new ArrayList<>();
+//
+//        for (House house : houses) {
+//            house = new House(houseNumber, townId);
+//            if (house.getHouseNumber().equalsIgnoreCase(houseNumber) && house.getTownId().equalsIgnoreCase(townId)) {
+//                houses.remove(house);
+//                System.out.println("Successfully delete house number: " + houseNumber + " in town whose id is: " + townId.toUpperCase());
+//            }
+//        }
+        houses.removeIf(house -> house.getHouseNumber().equalsIgnoreCase(houseNumber) && house.getTownId().equalsIgnoreCase(townId));
+    }
+
 }
