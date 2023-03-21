@@ -344,16 +344,7 @@ public class HouseController {
      * @param townId      Enter town id to delete house
      */
     private void deleteHouseByTownId(String houseNumber, String townId) {
-
-//        List<House> houses = new ArrayList<>();
-//
-//        for (House house : houses) {
-//            house = new House(houseNumber, townId);
-//            if (house.getHouseNumber().equalsIgnoreCase(houseNumber) && house.getTownId().equalsIgnoreCase(townId)) {
-//                houses.remove(house);
-//                System.out.println("Successfully delete house number: " + houseNumber + " in town whose id is: " + townId.toUpperCase());
-//            }
-//        }
+        
         houses.removeIf(house -> house.getHouseNumber().equalsIgnoreCase(houseNumber) && house.getTownId().equalsIgnoreCase(townId));
     }
 

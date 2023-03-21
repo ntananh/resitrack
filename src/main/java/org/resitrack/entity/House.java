@@ -29,7 +29,7 @@ public class House {
 
     @Override
     public String toString() {
-        return "House{" +
+        return "House {" +
                 " id = '" + id + '\'' +
                 ", houseNumber = '" + houseNumber + '\'' +
                 ", townId = '" + townId.toUpperCase() + '\'' +

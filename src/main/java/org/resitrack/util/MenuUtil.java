@@ -7,7 +7,6 @@ public class MenuUtil {
     public final static String EXIT = "4";
     public final static String ADD_HOUSE = "1";
     public final static String DELETE_HOUSE = "2";
-    public final static String SHOW_HOUSE = "3";
 
     public static void mainMenu() {
         System.out.println("|-----------Resident Management-----------|");
@@ -33,7 +32,6 @@ public class MenuUtil {
         System.out.println("\n\n|----------------House Menu---------------|");
         System.out.println("| 1. Add House                            |");
         System.out.println("| 2. Delete House                         |");
-        System.out.println("| 3. show House                           |");
         System.out.println("| 4. Exit                                 |");
         System.out.println("|-----------------------------------------|");
     }

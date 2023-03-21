@@ -109,9 +109,6 @@ public class Main {
                 case DELETE_HOUSE:
                     houseController.deleteHouse();
                     break;
-                case SHOW_HOUSE:
-                    houseController.houseInformation();
-                    break;
                 default:
                     System.out.println("Wrong house manage choice!!!");
             }
