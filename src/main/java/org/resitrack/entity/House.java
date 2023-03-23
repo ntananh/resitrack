@@ -30,7 +30,7 @@ public class House {
     @Override
     public String toString() {
         return "House {" +
-                " id = '" + id + '\'' +
+                " id = '" + id.toUpperCase() + '\'' +
                 ", houseNumber = '" + houseNumber + '\'' +
                 ", townId = '" + townId.toUpperCase() + '\'' +
                 '}';

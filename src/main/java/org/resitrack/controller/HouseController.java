@@ -19,7 +19,7 @@ public class HouseController {
     /**
      * Users can choose to continue adding houses by ADDING_HOUSE
      */
-    public final static String ADDING_HOUSE = "0";
+    public final static String EXIT = "0";
 
     /**
      * User can delete 1 house by using DELETE_ONE_HOUSE
@@ -30,6 +30,10 @@ public class HouseController {
      * User can delete multiple house by using DELETE_MULTIPLE_HOUSE
      */
     public final static String DELETE_MULTIPLE_HOUSE = "m";
+    /**
+     * User can back to house menu by using BACK_HOUSE_MENU
+     */
+    public final static String BACK_HOUSE_MENU = "Back to House Menu";
 
     /**
      * Used to access Scanner.
@@ -88,7 +92,7 @@ public class HouseController {
             choice = scanner.nextLine();
             numberOfHouse++;
 
-        } while (!choice.equalsIgnoreCase(ADDING_HOUSE));
+        } while (!choice.equalsIgnoreCase(EXIT));
 
     }
 
@@ -206,42 +210,16 @@ public class HouseController {
      */
     public void deleteHouse() {
 
-        String houseNumber = getCheckHouse();
-        String townId;
-        String optionTwo;
+        String houseNumber = getHouseNumber();
 
         if (houseNumber == null) {
             System.out.println("There are no houses on the list. You cannot perform this operation");
             return;
         }
 
-        findHouseByHouseNumber(houseNumber);
-        System.out.println("Enter [o] to delete one house , Enter [m] to delete all houses whose house numbers are: " + houseNumber);
-        System.out.print("Your choice: ");
-
-        do {
-            optionTwo = scanner.nextLine();
-
-            if (optionTwo.equalsIgnoreCase(DELETE_ONE_HOUSE)) {
-                System.out.print("Please enter your town id to delete: ");
-                townId = scanner.nextLine();
-                do {
-                    System.out.println("Town id: " + townId.toUpperCase() + " not found, please enter the correct town id in the list below: ");
-
-                    System.out.print("Please enter town id again here: ");
-                    townId = scanner.nextLine();
-
-                } while (townController.isTownExisted(townId));
-
-                deleteHouseByTownId(houseNumber, townId);
-
-            }
-            if (optionTwo.equalsIgnoreCase(DELETE_MULTIPLE_HOUSE)) {
-                deleteHouseByHouseNumber(houseNumber);
-                System.out.println("Successfully deleted");
-            }
-
-        } while (optionTwo.equalsIgnoreCase(DELETE_ONE_HOUSE) && optionTwo.equalsIgnoreCase(DELETE_MULTIPLE_HOUSE));
+        if (houseNumber.equalsIgnoreCase(BACK_HOUSE_MENU)){
+            System.out.println("\"Back to House Menu\"");
+        }
 
     }
 
@@ -252,27 +230,71 @@ public class HouseController {
      *
      * @return The House number
      */
-    private String getCheckHouse() {
+    private String getHouseNumber() {
+
         int currentNumberOfHouse = getNumberOfHouse();
+
         if (currentNumberOfHouse <= 0) {
             return null;
         }
-        System.out.println("Existing home listings: ");
-        houseInformation();
 
-        System.out.print("Enter the house number you want to delete: ");
-        String houseNumber = scanner.nextLine();
+        String townId;
+        String choice;
+        String optionTwo;
 
-        while (!isHouseExisted(houseNumber)) {
-            System.out.println("House number: " + houseNumber + " not found, please enter the correct house number in the list below: ");
+        do {
+
+            System.out.println(">Enter 0 to exit, or press any key to continue!");
+            choice = scanner.nextLine();
+            if (choice.equalsIgnoreCase(EXIT)) {
+                break;
+            }
+            System.out.println("Existing home listings: ");
             houseInformation();
 
-            System.out.print("Please enter house number again here: ");
-            houseNumber = scanner.nextLine();
+            System.out.print("Enter the house number you want to delete: "); // logic exit
+            String houseNumber = scanner.nextLine();
+            findHouseByHouseNumber(houseNumber);
 
-        }
+            while (!isHouseExisted(houseNumber)) {
+                System.out.println("House number: " + houseNumber + " not found, please enter the correct house number in the list below: ");
+                houseInformation();
 
-        return houseNumber;
+                System.out.print("Please enter house number again here: ");
+                houseNumber = scanner.nextLine();
+
+            }
+            System.out.println("Enter [o] to delete one house , Enter [m] to delete all houses whose house numbers are: " + houseNumber);
+            System.out.print("Your choice: ");
+
+            do {
+                optionTwo = scanner.nextLine();
+
+                if (optionTwo.equalsIgnoreCase(DELETE_ONE_HOUSE)) {
+                    System.out.print("Please enter your town id to delete: ");
+                    townId = scanner.nextLine();
+                    do {
+                        System.out.println("Town id: " + townId.toUpperCase() + " not found, please enter the correct town id in the list below: ");
+
+                        System.out.print("Please enter town id again here: ");
+                        townId = scanner.nextLine();
+
+                    } while (townController.isTownExisted(townId));
+
+                    deleteHouseByTownId(houseNumber, townId);
+
+                }
+                if (optionTwo.equalsIgnoreCase(DELETE_MULTIPLE_HOUSE)) {
+                    deleteHouseByHouseNumber(houseNumber);
+                    System.out.println("Successfully deleted");
+                }
+
+            } while (optionTwo.equalsIgnoreCase(DELETE_ONE_HOUSE) && optionTwo.equalsIgnoreCase(DELETE_MULTIPLE_HOUSE));
+
+            return houseNumber;
+
+        } while (!choice.equalsIgnoreCase(EXIT));
+        return BACK_HOUSE_MENU;
     }
 
     /**
@@ -344,7 +366,7 @@ public class HouseController {
      * @param townId      Enter town id to delete house
      */
     private void deleteHouseByTownId(String houseNumber, String townId) {
-        
+
         houses.removeIf(house -> house.getHouseNumber().equalsIgnoreCase(houseNumber) && house.getTownId().equalsIgnoreCase(townId));
     }
 
