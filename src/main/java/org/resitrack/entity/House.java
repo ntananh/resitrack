@@ -1,5 +1,6 @@
 package org.resitrack.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class House {
@@ -7,12 +8,15 @@ public class House {
     private String houseNumber;
     private String householdId;
     private String townId;
-    private List<Person> members;
+    private List<Person> members = new ArrayList<>();
 
     public House(String houseNumber, String townId) {
         this.id = "HID" + houseNumber;
         this.houseNumber = houseNumber;
         this.townId = townId;
+    }
+
+    public House() {
     }
 
     public String getId() {
@@ -25,6 +29,14 @@ public class House {
 
     public String getHouseNumber() {
         return houseNumber;
+    }
+
+    public void setMembers(List<Person> members) {
+        this.members = members;
+    }
+
+    public List<Person> getMembers() {
+        return members;
     }
 
     @Override
