@@ -12,13 +12,6 @@ public class Person {
     private Gender gender;
     private LocalDate dob;
 
-    public Person(String id, String name, Gender gender) {
-        this.id = id;
-        this.name = name;
-        this.gender = gender;
-        this.dob = LocalDate.now();
-    }
-
     public String getId() {
         return id;
     }
@@ -27,6 +20,12 @@ public class Person {
         return name;
     }
 
+    public String getIdNumber() {
+        if (idNumber == null)
+            return "Not have";
+        else
+            return String.valueOf(idNumber);
+    }
 
     public Gender getGender() {
         return gender;
@@ -35,7 +34,15 @@ public class Person {
     public LocalDate getDob() {
         return dob;
     }
+    public Person(){
 
+    }
+    public Person(String id, String name, Gender gender) {
+        this.id = id;
+        this.name = name;
+        this.gender = gender;
+        this.dob = LocalDate.now();
+    }
     @Override
     public String toString() {
         return "Person{" +

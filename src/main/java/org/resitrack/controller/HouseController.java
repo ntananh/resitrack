@@ -181,4 +181,30 @@ public class HouseController {
 
         return new House(houseNumber, townId);
     }
+
+    public House findHouseById(String id) {
+        for (House house : houses) {
+            if (id.equalsIgnoreCase(house.getId())) {
+                return house;
+            }
+        }
+        return null;
+    }
+
+    public void printAllHouseInformation() {
+        System.out.format("| %-20s | %-20s |\n", "ID", "Number house");
+        for (House house : houses) {
+            System.out.format("| %-20s | %-20s |\n",
+                    house.getId(),
+                    house.getHouseNumber());
+        }
+    }
+
+    public int getAllNumberOfHouse() {
+        return houses.size();
+    }
+    public boolean isHouseExisted(String id) {
+        return houses.stream().anyMatch(house -> id.equalsIgnoreCase(house.getId()));
+    }
+
 }

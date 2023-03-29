@@ -15,7 +15,6 @@ import java.util.Scanner;
 import static org.resitrack.util.MenuUtil.*;
 
 public class Main {
-    //
     /**
      * So that the manageHouse function can access Town through towns
      */
@@ -32,12 +31,11 @@ public class Main {
      * So that the manageHouse function can access HouseController through houseController
      */
     private final static HouseController houseController = new HouseController();
-
+    private final static List<Person> people = new ArrayList<>();
+    private final static PersonController personController = new PersonController();
     public static void main(String[] args) {
-
-        List<Person> people = new ArrayList<>();
-        PersonController personController = new PersonController();
-
+        House house = new House("6B", "T1");
+        houses.add(house);
         Scanner scanner = new Scanner(System.in);
         String choice;
 
@@ -49,7 +47,7 @@ public class Main {
             switch (choice) {
                 case MANAGE_PERSON:
                     personController.setPeople(people);
-                    managePerson(personController, scanner);
+                    managePerson(scanner);
                     break;
                 case MANAGE_HOUSE:
                     manageHouse(scanner);
@@ -58,32 +56,115 @@ public class Main {
                     townController.setTowns(towns);
                     System.out.println("Manage town");
                     break;
+                case EXIT_MAIN_MENU:
+                    break;
                 default:
                     System.out.println("Wrong choice, type again!");
             }
 
-        } while (!choice.equals(EXIT));
+        } while (!choice.equals(EXIT_MAIN_MENU));
     }
 
-    public static void managePerson(PersonController personController, Scanner scanner) {
+    public static void managePerson(Scanner scanner) {
+        personController.setHouseController(houseController);
+        personController.setPeople(people);
+        houseController.setHouses(houses);
         String choice;
         do {
-            personMenu();
-            System.out.print("> Enter your manage person choice: ");
+            System.out.println("Manage Person");
+            System.out.println("1. Manage all people");
+            System.out.println("2. Manage members family");
+            System.out.println("3. Exit function ");
+            System.out.print("> Enter your choice: ");
             choice = scanner.nextLine();
-
             switch (choice) {
                 case "1":
-                    personController.addNewPerson();
+                    String subChoice;
+                    do {
+                        allPersonMenu();
+                        System.out.print("> Enter your all manage person choice: ");
+                        subChoice = scanner.nextLine();
+
+                        switch (subChoice) {
+                            case ADD_PERSON:
+                                personController.addNewPerson();
+                                break;
+                            case SHOW_ALL_PERSON:
+                                System.out.println("Show all person ");
+                                personController.showAll(people);
+                                break;
+                            case SEARCH_PERSON:
+                                personController.searchPeopleByName();
+                                break;
+                            case DELETE_PERSON:
+                                String choose;
+                                do {
+                                    System.out.println("Delete function: ");
+                                    System.out.println("1. Delete person by ID");
+                                    System.out.println("2. Delete people by name");
+                                    System.out.println("3. Exit function ");
+                                    System.out.print("> Enter your choice: ");
+                                    choose = scanner.nextLine();
+                                    switch (choose) {
+                                        case DELETE_PERSON_BY_ID:
+                                            System.out.print("Enter person id want to delete: ");
+                                            String id = scanner.nextLine();
+                                            boolean deletedPerson = personController.deletePersonById(id);
+                                            String logPerson = deletedPerson ? "Delete success !" : "Delete False";
+                                            System.out.println(logPerson);
+                                            break;
+                                        case DELETE_PERSON_BY_NAME:
+                                            System.out.print("Enter Name Person want to delete: ");
+                                            String name = scanner.nextLine();
+                                            boolean deletedPeople = personController.deletePeopleByName(name);
+                                            String logPeople = deletedPeople ? "Delete success !" : "Delete False";
+                                            System.out.println(logPeople);
+                                            break;
+                                        case EXIT_DELETE_PERSON_MENU:
+                                            break;
+                                        default:
+                                            System.out.println("Wrong choose !!!");
+                                    }
+                                } while (!choose.equals(EXIT_DELETE_PERSON_MENU));
+                                break;
+                            case EXIT_ALL_PERSON_MENU:
+                                break;
+                            default:
+                                System.out.println("Wrong all person manage choice!!!");
+                        }
+
+                    } while (!subChoice.equals(EXIT_ALL_PERSON_MENU));
                     break;
                 case "2":
-                    personController.searchPeopleByName();
+                    String subChoiceTwo;
+                    do {
+                        housePersonMenu();
+                        System.out.print("> Enter your house manage person choice: ");
+                        subChoiceTwo = scanner.nextLine();
+                        switch (subChoiceTwo) {
+                            case "1":
+                                String logMessage = personController.addPeopleToHouse() ? "Add people to house success !" : "Add people to house false";
+                                System.out.println(logMessage);
+                                break;
+                            case "2":
+                                String logMessageDelete = personController.removePeopleToHouse() ? "Delete success !" : "Delete false";
+                                System.out.println(logMessageDelete);
+                                break;
+                            case "3":
+                                personController.showPeopleInHouse();
+                                break;
+                            case EXIT_HOUSE_PERSON_MENU:
+                                break;
+                            default:
+                                System.out.println("Wrong house person manage choice!!!");
+                        }
+                    } while (!subChoiceTwo.equals(EXIT_HOUSE_PERSON_MENU));
+                case "3":
                     break;
                 default:
                     System.out.println("Wrong person manage choice!!!");
             }
-
-        } while (!choice.equals(EXIT));
+        } while (!choice.equals("3"));
     }
 
     public static void manageHouse(Scanner scanner) {
@@ -102,10 +183,12 @@ public class Main {
                 case ADD_HOUSE:
                     houseController.createNewHouse();
                     break;
+                case EXIT_HOUSE_MENU:
+                    break;
                 default:
                     System.out.println("Wrong person manage choice!!!");
             }
 
-        } while (!choice.equals(EXIT));
+        } while (!choice.equals(EXIT_HOUSE_MENU));
     }
 }
