@@ -15,6 +15,7 @@ import java.util.Scanner;
 import static org.resitrack.util.MenuUtil.*;
 
 public class Main {
+    //
     /**
      * So that the manageHouse function can access Town through towns
      */
