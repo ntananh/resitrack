@@ -204,6 +204,7 @@ public class HouseController {
     /**
      * This function is used to remove houses from town.
      * When you enter the program, you will be checked to see if there are any houses or not. If not, an announcement will be made.
+     * If a house exists, then a message will be given to ask the user if he wants to continue deleting the house, if so, continue the program, if not, exit the house menu.
      * If yes, then the user will choose 1 of 2 options.
      * Option 1 will delete all houses whose house number is the same as the house number entered.
      * Option 2 you will have to enter the town id to delete the house
@@ -211,15 +212,56 @@ public class HouseController {
     public void deleteHouse() {
 
         String houseNumber = getHouseNumber();
+        String optionTwo, townId;
 
         if (houseNumber == null) {
             System.out.println("There are no houses on the list. You cannot perform this operation");
             return;
         }
 
-        if (houseNumber.equalsIgnoreCase(BACK_HOUSE_MENU)){
+        if (houseNumber.equalsIgnoreCase(BACK_HOUSE_MENU)) {
             System.out.println("\"Back to House Menu\"");
+            return;
         }
+
+        System.out.println();
+        System.out.println("Enter [o] to delete one house , Enter [m] to delete all houses whose house numbers are: " + houseNumber);
+        System.out.print("Your choice: ");
+
+        do {
+
+            optionTwo = scanner.nextLine();
+
+            if (optionTwo.equalsIgnoreCase(DELETE_ONE_HOUSE)) {
+                System.out.print("Please enter your town id to delete: ");
+
+                townId = scanner.nextLine();
+                Town town = townController.getTownById(townId);
+                String townName = town.getName();
+
+                while (!townController.isTownExisted(townId)) {
+                    System.out.println("Town id: " + townId.toUpperCase() + " not found, please enter the correct town id in the list below: ");
+
+                    System.out.print("Please enter town id again here: ");
+                    townId = scanner.nextLine();
+                }
+
+                deleteHouseByTownId(houseNumber, townId);
+                System.out.println("delete house with house number " + townId.toUpperCase() + " " + townName);
+                return;
+            }
+
+            if (optionTwo.equalsIgnoreCase(DELETE_MULTIPLE_HOUSE)) {
+                deleteHouseByHouseNumber(houseNumber);
+                System.out.println("Successfully deleted");
+                return;
+            }
+
+            System.out.println("Your selection is not on the list, please re-enter it here: ");
+
+
+        } while (!optionTwo.equalsIgnoreCase(DELETE_ONE_HOUSE) && !optionTwo.equalsIgnoreCase(DELETE_MULTIPLE_HOUSE));
+
 
     }
 
@@ -233,68 +275,33 @@ public class HouseController {
     private String getHouseNumber() {
 
         int currentNumberOfHouse = getNumberOfHouse();
+        String choice, houseNumber;
 
         if (currentNumberOfHouse <= 0) {
             return null;
         }
 
-        String townId;
-        String choice;
-        String optionTwo;
+        System.out.println("\">Enter 0 to exit, or press any key to continue!\".");
+        choice = scanner.nextLine();
 
-        do {
+        if (choice.equalsIgnoreCase(EXIT)) {
+            return BACK_HOUSE_MENU;
+        }
 
-            System.out.println(">Enter 0 to exit, or press any key to continue!");
-            choice = scanner.nextLine();
-            if (choice.equalsIgnoreCase(EXIT)) {
-                break;
-            }
-            System.out.println("Existing home listings: ");
+        System.out.print("Enter house number you want to delete: ");
+        houseNumber = scanner.nextLine();
+
+        while (!isHouseExisted(houseNumber)) {
+            System.out.println("House number: " + houseNumber + " not found, please enter the correct house number in the list below: ");
             houseInformation();
 
-            System.out.print("Enter the house number you want to delete: "); // logic exit
-            String houseNumber = scanner.nextLine();
-            findHouseByHouseNumber(houseNumber);
+            System.out.print("Please enter house number again here: ");
+            houseNumber = scanner.nextLine();
 
-            while (!isHouseExisted(houseNumber)) {
-                System.out.println("House number: " + houseNumber + " not found, please enter the correct house number in the list below: ");
-                houseInformation();
+        }
+        findHouseByHouseNumber(houseNumber);
 
-                System.out.print("Please enter house number again here: ");
-                houseNumber = scanner.nextLine();
-
-            }
-            System.out.println("Enter [o] to delete one house , Enter [m] to delete all houses whose house numbers are: " + houseNumber);
-            System.out.print("Your choice: ");
-
-            do {
-                optionTwo = scanner.nextLine();
-
-                if (optionTwo.equalsIgnoreCase(DELETE_ONE_HOUSE)) {
-                    System.out.print("Please enter your town id to delete: ");
-                    townId = scanner.nextLine();
-                    do {
-                        System.out.println("Town id: " + townId.toUpperCase() + " not found, please enter the correct town id in the list below: ");
-
-                        System.out.print("Please enter town id again here: ");
-                        townId = scanner.nextLine();
-
-                    } while (townController.isTownExisted(townId));
-
-                    deleteHouseByTownId(houseNumber, townId);
-
-                }
-                if (optionTwo.equalsIgnoreCase(DELETE_MULTIPLE_HOUSE)) {
-                    deleteHouseByHouseNumber(houseNumber);
-                    System.out.println("Successfully deleted");
-                }
-
-            } while (optionTwo.equalsIgnoreCase(DELETE_ONE_HOUSE) && optionTwo.equalsIgnoreCase(DELETE_MULTIPLE_HOUSE));
-
-            return houseNumber;
-
-        } while (!choice.equalsIgnoreCase(EXIT));
-        return BACK_HOUSE_MENU;
+        return houseNumber;
     }
 
     /**
