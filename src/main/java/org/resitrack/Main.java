@@ -86,46 +86,9 @@ public class Main {
                         subChoice = scanner.nextLine();
 
                         switch (subChoice) {
-                            case ADD_PERSON:
-                                personController.addNewPerson();
-                                break;
                             case SHOW_ALL_PERSON:
                                 System.out.println("Show all person ");
                                 personController.showAll(people);
-                                break;
-                            case SEARCH_PERSON:
-                                personController.searchPeopleByName();
-                                break;
-                            case DELETE_PERSON:
-                                String choose;
-                                do {
-                                    System.out.println("Delete function: ");
-                                    System.out.println("1. Delete person by ID");
-                                    System.out.println("2. Delete people by name");
-                                    System.out.println("3. Exit function ");
-                                    System.out.print("> Enter your choice: ");
-                                    choose = scanner.nextLine();
-                                    switch (choose) {
-                                        case DELETE_PERSON_BY_ID:
-                                            System.out.print("Enter person id want to delete: ");
-                                            String id = scanner.nextLine();
-                                            boolean deletedPerson = personController.deletePersonById(id);
-                                            String logPerson = deletedPerson ? "Delete success !" : "Delete False";
-                                            System.out.println(logPerson);
-                                            break;
-                                        case DELETE_PERSON_BY_NAME:
-                                            System.out.print("Enter Name Person want to delete: ");
-                                            String name = scanner.nextLine();
-                                            boolean deletedPeople = personController.deletePeopleByName(name);
-                                            String logPeople = deletedPeople ? "Delete success !" : "Delete False";
-                                            System.out.println(logPeople);
-                                            break;
-                                        case EXIT_DELETE_PERSON_MENU:
-                                            break;
-                                        default:
-                                            System.out.println("Wrong choose !!!");
-                                    }
-                                } while (!choose.equals(EXIT_DELETE_PERSON_MENU));
                                 break;
                             case EXIT_ALL_PERSON_MENU:
                                 break;
@@ -145,13 +108,6 @@ public class Main {
                             case "1":
                                 String logMessage = personController.addPeopleToHouse() ? "Add people to house success !" : "Add people to house false";
                                 System.out.println(logMessage);
-                                break;
-                            case "2":
-                                String logMessageDelete = personController.removePeopleToHouse() ? "Delete success !" : "Delete false";
-                                System.out.println(logMessageDelete);
-                                break;
-                            case "3":
-                                personController.showPeopleInHouse();
                                 break;
                             case EXIT_HOUSE_PERSON_MENU:
                                 break;
