@@ -22,18 +22,9 @@ public class HouseController {
     public final static String EXIT = "0";
 
     /**
-     * User can delete 1 house by using DELETE_ONE_HOUSE
-     */
-    public final static String DELETE_ONE_HOUSE = "o";
-
-    /**
      * User can delete multiple house by using DELETE_MULTIPLE_HOUSE
      */
     public final static String DELETE_MULTIPLE_HOUSE = "m";
-    /**
-     * User can back to house menu by using BACK_HOUSE_MENU
-     */
-    public final static String BACK_HOUSE_MENU = "Back to House Menu";
 
     /**
      * Used to access Scanner.
@@ -203,65 +194,44 @@ public class HouseController {
 
     /**
      * This function is used to remove houses from town.
-     * When you enter the program, you will be checked to see if there are any houses or not. If not, an announcement will be made.
-     * If a house exists, then a message will be given to ask the user if he wants to continue deleting the house, if so, continue the program, if not, exit the house menu.
-     * If yes, then the user will choose 1 of 2 options.
-     * Option 1 will delete all houses whose house number is the same as the house number entered.
-     * Option 2 you will have to enter the town id to delete the house
+     * When entering the program, you will be checked to see if any houses exist in the townId you just entered.
+     * Otherwise, an announcement will be made.
+     * If at least one house exists, there will be a message asking if the user wants to continue deleting the house,
+     * If yes, then user will choose 1 of 2 options.
+     * Option 1 will delete all houses that exist in the townId just entered.
+     * Option 2 must enter the house number to delete the house.
+     * Otherwise exit the house menu.
      */
-    public void deleteHouse() {
+    public void deleteHouse(String townId) {
 
-        String houseNumber = getHouseNumber();
-        String optionTwo, townId;
+        String yourChoice;
 
-        if (houseNumber == null) {
-            System.out.println("There are no houses on the list. You cannot perform this operation");
+        if (findHouseByTownId(townId) == null) {
+            System.out.println("\nNo house in town id: " + townId.toUpperCase());
             return;
         }
 
-        if (houseNumber.equalsIgnoreCase(BACK_HOUSE_MENU)) {
-            System.out.println("\"Back to House Menu\"");
+        System.out.println("Enter [m] to delete all houses in town whose town id is: " + townId.toUpperCase()
+                + " or press any key to continue");
+        yourChoice = scanner.nextLine();
+
+        if (yourChoice.equalsIgnoreCase(DELETE_MULTIPLE_HOUSE)) {
+
+            String yesOrNo;
+            System.out.println("Are you sure you want to delete all houses in townId as: " + townId.toUpperCase() + "?");
+            System.out.print("Press any key to continue or enter 0 to exit: ");
+            yesOrNo = scanner.nextLine();
+
+            if (yesOrNo.equalsIgnoreCase(EXIT)){
+                System.out.println("\nNo successful house removal");
+                return;
+            }
+            deleteHouseByTownId(townId);
+            System.out.println("Successful deleted");
             return;
         }
 
-        System.out.println();
-        System.out.println("Enter [o] to delete one house , Enter [m] to delete all houses whose house numbers are: " + houseNumber);
-        System.out.print("Your choice: ");
-
-        do {
-
-            optionTwo = scanner.nextLine();
-
-            if (optionTwo.equalsIgnoreCase(DELETE_ONE_HOUSE)) {
-                System.out.print("Please enter your town id to delete: ");
-
-                townId = scanner.nextLine();
-                Town town = townController.getTownById(townId);
-                String townName = town.getName();
-
-                while (!townController.isTownExisted(townId)) {
-                    System.out.println("Town id: " + townId.toUpperCase() + " not found, please enter the correct town id in the list below: ");
-
-                    System.out.print("Please enter town id again here: ");
-                    townId = scanner.nextLine();
-                }
-
-                deleteHouseByTownId(houseNumber, townId);
-                System.out.println("delete house with house number " + townId.toUpperCase() + " " + townName);
-                return;
-            }
-
-            if (optionTwo.equalsIgnoreCase(DELETE_MULTIPLE_HOUSE)) {
-                deleteHouseByHouseNumber(houseNumber);
-                System.out.println("Successfully deleted");
-                return;
-            }
-
-            System.out.println("Your selection is not on the list, please re-enter it here: ");
-
-
-        } while (!optionTwo.equalsIgnoreCase(DELETE_ONE_HOUSE) && !optionTwo.equalsIgnoreCase(DELETE_MULTIPLE_HOUSE));
-
+        deleteOneHouse(townId);
 
     }
 
@@ -270,48 +240,57 @@ public class HouseController {
      * If a house exists, a list of houses will be displayed. and let the user enter the house number they want to delete.
      * If you enter it incorrectly, re-enter it.
      *
-     * @return The House number
+     * @param townId pass in a param named townId to do the job
      */
-    private String getHouseNumber() {
+    private void deleteOneHouse(String townId) {
 
         int currentNumberOfHouse = getNumberOfHouse();
-        String choice, houseNumber;
+        String houseNumber;
 
         if (currentNumberOfHouse <= 0) {
-            return null;
+            return;
         }
 
-        System.out.println("\">Enter 0 to exit, or press any key to continue!\".");
-        choice = scanner.nextLine();
-
-        if (choice.equalsIgnoreCase(EXIT)) {
-            return BACK_HOUSE_MENU;
-        }
-
-        System.out.print("Enter house number you want to delete: ");
+        System.out.print("Enter house number you want to delete, or enter 0 to exit: ");
         houseNumber = scanner.nextLine();
+
+        if (houseNumber.equalsIgnoreCase(EXIT)) {
+            System.out.println("\nNo successful house removal");
+            return;
+        }
 
         while (!isHouseExisted(houseNumber)) {
             System.out.println("House number: " + houseNumber + " not found, please enter the correct house number in the list below: ");
-            houseInformation();
+            findHouseByTownId(townId);
 
             System.out.print("Please enter house number again here: ");
             houseNumber = scanner.nextLine();
 
         }
-        findHouseByHouseNumber(houseNumber);
 
-        return houseNumber;
+        String yesOrNo;
+        System.out.println("Are you sure you want to delete the house whose address is: " + houseNumber + " " + townId.toUpperCase() + "?");
+        System.out.print("Press any key to continue or enter 0 to exit: ");
+        yesOrNo = scanner.nextLine();
+
+        if (yesOrNo.equalsIgnoreCase(EXIT)){
+            System.out.println("\nNo successful house removal");
+            return;
+        }
+
+        deleteHouseTownIdAndHouseNumber(houseNumber, townId);
+        System.out.println("successful delete");
     }
 
     /**
      * This function is used to check if the house number you just entered already exists
      *
-     * @param houseNumber pass ID house in String
+     * @param houseNumber Pass house number in String
      * @return true when a house exists, otherwise false
      */
     private boolean isHouseExisted(String houseNumber) {
-        return houses.stream().anyMatch(house -> houseNumber.equalsIgnoreCase(house.getHouseNumber()));
+        return houses.stream().anyMatch(house
+                -> houseNumber.equalsIgnoreCase(house.getHouseNumber()));
     }
 
     /**
@@ -324,45 +303,41 @@ public class HouseController {
     }
 
     /**
-     * This function is used to display the list of houses
-     */
-    public void houseInformation() {
-
-        houses.forEach(System.out::println);
-    }
-
-    /**
-     * This function is used to find houses by house number.
-     * Once found, it will display the houses with the same house number as the house number entered
+     * This function is used to find houses by town id.
+     * If there are no houses in town, return null.
+     * If yes, it will be entered in the list and then display the houses in the town
      *
-     * @param houseNumber Enter the house number to see if there are any houses with the same house number
+     * @param townId Pass the townId param to execute the function
+     * @return house listings searched by townId
      */
-    private void findHouseByHouseNumber(String houseNumber) {
+    public String findHouseByTownId(String townId) {
 
-        List<House> housesWithHouseNumbers = new ArrayList<>();
+        List<House> housesWithTownId = new ArrayList<>();
 
         for (House house : houses) {
-            if (houseNumber.equalsIgnoreCase(house.getHouseNumber())) {
+            if (townId.equalsIgnoreCase(house.getTownId())) {
 
-                housesWithHouseNumbers.add(house);
-
+                housesWithTownId.add(house);
             }
         }
 
+        if (housesWithTownId.size() <= 0) {
+            return null;
+        }
         System.out.println();
-        System.out.println("List of houses with house numbers are: " + houseNumber);
-        housesWithHouseNumbers.forEach(System.out::println);
-
+        System.out.println("Listings house found:");
+        housesWithTownId.forEach(System.out::println);
+        return "house listings searched by town id";
     }
 
     /**
-     * This function is used to delete all houses with the same house number as entered
+     * This function is used to delete all houses with the same townId as entered
      *
-     * @param houseNumber Pass in the house number to delete the houses whose house number is the same as the house number entered
+     * @param townId Enter town id to delete all houses with town id same as entered town id
      */
-    private void deleteHouseByHouseNumber(String houseNumber) {
-
-        houses.removeIf(house -> house.getHouseNumber().equalsIgnoreCase(houseNumber));
+    private void deleteHouseByTownId(String townId) {
+        houses.removeIf(house ->
+                house.getTownId().equalsIgnoreCase(townId));
 
     }
 
@@ -372,9 +347,10 @@ public class HouseController {
      * @param houseNumber Pass in the house number to delete the houses
      * @param townId      Enter town id to delete house
      */
-    private void deleteHouseByTownId(String houseNumber, String townId) {
-
-        houses.removeIf(house -> house.getHouseNumber().equalsIgnoreCase(houseNumber) && house.getTownId().equalsIgnoreCase(townId));
+    private void deleteHouseTownIdAndHouseNumber(String houseNumber, String townId) {
+        houses.removeIf(house ->
+                house.getHouseNumber().equalsIgnoreCase(houseNumber)
+                        && house.getTownId().equalsIgnoreCase(townId));
     }
 
 }

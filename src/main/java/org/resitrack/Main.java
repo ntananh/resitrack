@@ -9,6 +9,7 @@ import org.resitrack.entity.Town;
 import org.resitrack.util.MenuUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,12 +20,14 @@ public class Main {
     /**
      * So that the manageHouse function can access Town through towns
      */
-    private final static List<Town> towns = new ArrayList<>();
+    private final static List<Town> towns = new ArrayList<>(Arrays.asList(new Town("T1", "HCM"), new Town("T2", "HN"), new Town("T3", "DN")));
 
     /**
      * So that the manageHouse function can access House through houses
      */
-    private final static List<House> houses = new ArrayList<>();
+    private final static List<House> houses = new ArrayList<>(Arrays.asList(new House("12", "T1"),
+            new House("12", "T2"), new House("12", "T3"),
+            new House("13", "T2"), new House("14", "T3"), new House("13", "T3")));
 
     /**
      * So that the manageHouse function can access TownController through townController
@@ -35,6 +38,8 @@ public class Main {
      * So that the manageHouse function can access HouseController through houseController
      */
     private final static HouseController houseController = new HouseController();
+
+
 
     public static void main(String[] args) {
 
@@ -106,12 +111,46 @@ public class Main {
                     houseController.createNewHouse();
                     break;
                 case DELETE_HOUSE:
-                    houseController.deleteHouse();
+
+                    String townId;
+
+                    System.out.println("> Enter 0 to exit, or press any key to continue!.");
+                    choice = scanner.nextLine();
+
+                    if (choice.equalsIgnoreCase(EXIT)) {
+                        break;
+                    }
+
+                    if (towns.size() <= 0){
+                        System.out.println("The town is empty, this function cannot be performed." +
+                                " Please create a new town first");
+                    }
+
+                    System.out.println("List of town id:");
+                    townController.printAllTownInformation();
+
+                    System.out.print("Enter town id, or enter 0 to exit: ");
+                    townId = scanner.nextLine();
+
+                    if (townId.equalsIgnoreCase(EXIT)){
+                        System.out.println("\nNo successful house removal");
+                        return;
+                    }
+
+                    while (!townController.isTownExisted(townId)) {
+                        System.out.println("Town id: " + townId + " not found, please enter correct town id in list bellow: ");
+                        townController.printAllTownInformation();
+
+                        System.out.print("Please enter town id again here: ");
+                        townId = scanner.nextLine();
+                    }
+
+                    houseController.deleteHouse(townId);
+
                     break;
                 default:
                     System.out.println("Wrong house manage choice!!!");
             }
-
         } while (!choice.equals(EXIT));
     }
 }
