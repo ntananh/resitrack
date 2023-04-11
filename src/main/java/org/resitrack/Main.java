@@ -9,7 +9,6 @@ import org.resitrack.entity.Town;
 import org.resitrack.util.MenuUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,14 +19,12 @@ public class Main {
     /**
      * So that the manageHouse function can access Town through towns
      */
-    private final static List<Town> towns = new ArrayList<>(Arrays.asList(new Town("T1", "HCM"), new Town("T2", "HN"), new Town("T3", "DN")));
+    private final static List<Town> towns = new ArrayList<>();
 
     /**
      * So that the manageHouse function can access House through houses
      */
-    private final static List<House> houses = new ArrayList<>(Arrays.asList(new House("12", "T1"),
-            new House("12", "T2"), new House("12", "T3"),
-            new House("13", "T2"), new House("14", "T3"), new House("13", "T3")));
+    private final static List<House> houses = new ArrayList<>();
 
     /**
      * So that the manageHouse function can access TownController through townController
